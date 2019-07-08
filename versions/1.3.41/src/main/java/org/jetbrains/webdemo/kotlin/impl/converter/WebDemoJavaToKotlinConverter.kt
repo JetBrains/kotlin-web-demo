@@ -21,8 +21,8 @@ import com.intellij.lang.java.JavaLanguage
 import com.intellij.psi.*
 import org.jetbrains.kotlin.j2k.ConverterSettings
 import org.jetbrains.kotlin.j2k.EmptyJavaToKotlinServices
-import org.jetbrains.kotlin.j2k.JavaToKotlinConverter
 import org.jetbrains.kotlin.j2k.JavaToKotlinTranslator
+import org.jetbrains.kotlin.j2k.OldJavaToKotlinConverter
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
 import java.lang.reflect.InvocationTargetException
@@ -31,7 +31,7 @@ import java.util.*
 object WebDemoJavaToKotlinConverter {
     fun getResult(code: String): String {
         val project = EnvironmentManager.getEnvironment().project
-        val converter = JavaToKotlinConverter(
+        val converter = OldJavaToKotlinConverter(
                 project,
                 ConverterSettings.defaultSettings,
                 EmptyJavaToKotlinServices)

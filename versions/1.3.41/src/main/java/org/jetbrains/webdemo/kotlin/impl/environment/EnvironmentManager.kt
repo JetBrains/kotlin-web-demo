@@ -34,7 +34,6 @@ import com.intellij.openapi.fileTypes.FileTypeRegistry
 import com.intellij.openapi.util.Getter
 import com.intellij.psi.FileContextProvider
 import com.intellij.psi.PsiAnnotation
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.augment.PsiAugmentProvider
 import com.intellij.psi.codeStyle.CodeStyleManager
@@ -72,6 +71,8 @@ object EnvironmentManager {
      */
     private val additionalCompilerArguments: List<String> = listOf(
             "-Xuse-experimental=kotlin.Experimental",
+            "-Xuse-experimental=kotlin.ExperimentalStdlibApi",
+            "-Xuse-experimental=kotlin.time.ExperimentalTime",
             "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes",
             "-Xuse-experimental=kotlin.contracts.ExperimentalContracts",
             "-Xuse-experimental=kotlin.experimental.ExperimentalTypeInference",
@@ -164,10 +165,6 @@ object EnvironmentManager {
 
             override fun isNotNull(owner: PsiModifierListOwner, checkBases: Boolean): Boolean {
                 return true
-            }
-
-            override fun hasHardcodedContracts(element: PsiElement?): Boolean {
-                return false
             }
         })
         project.registerService(CodeStyleManager::class.java, DummyCodeStyleManager())

@@ -15,6 +15,7 @@
  */
 
 @file:Suppress("PRE_RELEASE_CLASS")
+
 package org.jetbrains.webdemo.kotlin.impl
 
 import com.intellij.openapi.project.Project
@@ -25,7 +26,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories
 import org.jetbrains.kotlin.codegen.state.GenerationState
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.config.TargetPlatformVersion
 import org.jetbrains.kotlin.container.*
@@ -78,7 +78,6 @@ object ResolveUtils {
         val environment = EnvironmentManager.getEnvironment()
         val trace = CliBindingTrace()
         val configuration = environment.configuration
-        configuration.put(JVMConfigurationKeys.ADD_BUILT_INS_FROM_COMPILER_TO_DEPENDENCIES, true)
 
         val container = TopDownAnalyzerFacadeForJVM.createContainer(
                 environment.project,
@@ -86,8 +85,7 @@ object ResolveUtils {
                 trace,
                 configuration,
                 { globalSearchScope -> environment.createPackagePartProvider(globalSearchScope) },
-                { storageManager, ktFiles -> FileBasedDeclarationProviderFactory(storageManager, ktFiles) },
-                TopDownAnalyzerFacadeForJVM.newModuleSearchScope(project, files)
+                { storageManager, ktFiles -> FileBasedDeclarationProviderFactory(storageManager, ktFiles) }
         )
 
         container.getService(LazyTopDownAnalyzer::class.java).analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files, DataFlowInfo.EMPTY)
