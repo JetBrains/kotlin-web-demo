@@ -22,12 +22,16 @@ object BackendOutputMessages {
     private const val OUTPUT_TAG_START = "<outStream>"
     private const val OUTPUT_TAG_END = "</outStream>"
     private const val ERROR_TAG_END = "</errStream>"
+    private const val SAD_SMILE = "😢"
 
     private const val KOTLIN_COMPILER_ERROR_MESSAGE = "${ERROR_TAG_START}BUG$ERROR_TAG_END"
+    private const val KOTLIN_SERVER_ERROR_MESSAGE = "${ERROR_TAG_START}Service temporarily unavailable. Try a bit later $SAD_SMILE $ERROR_TAG_END"
     const val KOTLIN_TIMEOUT_MESSAGE = "${ERROR_TAG_START}Program was terminated after 10s.⌛️$ERROR_TAG_END"
     const val KOTLIN_LONG_OUTPUT_MESSAGE = "${ERROR_TAG_START}Your program produces too much output!$ERROR_TAG_END"
 
     fun buildKotlinCompilerErrorMessage(stackTrace: String): String {
         return "$KOTLIN_COMPILER_ERROR_MESSAGE$OUTPUT_TAG_START\nMessage:\n$stackTrace$OUTPUT_TAG_END"
     }
+
+    fun getServiceError() = KOTLIN_SERVER_ERROR_MESSAGE
 }

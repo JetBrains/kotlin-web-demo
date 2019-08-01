@@ -135,7 +135,9 @@ class MyHttpSession {
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Exception) {
-            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
+            val message = objectMapper.writeValueAsString(JavaExecutionResult(BackendOutputMessages
+                    .getServiceError(), null))
+            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, message)
             ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't run project. Project: $projectString", e)
         }
     }
