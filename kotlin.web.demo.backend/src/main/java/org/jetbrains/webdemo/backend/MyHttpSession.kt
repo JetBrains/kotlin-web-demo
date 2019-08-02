@@ -137,7 +137,7 @@ class MyHttpSession {
         } catch (e: Exception) {
             val message = objectMapper.writeValueAsString(JavaExecutionResult(BackendOutputMessages
                     .getServiceError(), null))
-            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, message)
+            response.sendResponse(HttpServletResponse.SC_OK, message)
             ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't run project. Project: $projectString", e)
         }
     }
