@@ -1,0 +1,17 @@
+name: Deployment of TryArrow in AWS
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Starting the deployment
+      env: # Or as an environment variable
+        AWS_TRY_ARROW_PEM: ${{ secrets.AWS_TRY_ARROW_PEM }}
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
