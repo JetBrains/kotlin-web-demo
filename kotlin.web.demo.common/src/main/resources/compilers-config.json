@@ -23,13 +23,6 @@
     "pluginBuild": "1.2.71-release-IJ2018.3-1"
   },
   {
-    "version": "1.3.41",
-    "stdlibVersion": "1.3.41",
-    "buildType": "Kotlin_1340_CompilerAllPlugins",
-    "build": "1.3.41-release-150",
-    "pluginBuild": "1.3.41-release-IJ2018.3-1"
-  },
-  {
     "version": "1.3.50",
     "stdlibVersion": "1.3.50",
     "buildType": "Kotlin_1350_Aggregate",
