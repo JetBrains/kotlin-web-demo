@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCompileException
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils
-import org.jetbrains.webdemo.kotlin.impl.WrapperLogger
 import java.util.*
 
 class KotlinCompilerWrapper {
@@ -35,8 +34,7 @@ class KotlinCompilerWrapper {
         try {
             val generationState = ResolveUtils.getGenerationState(currentPsiFiles, currentProject, configuration)
             val mainClass = findMainClass(generationState.bindingContext, currentPsiFiles, fileName, searchForMain)
-            KotlinCodegenFacade.compileCorrectFiles(generationState) { throwable, fileUrl -> WrapperLogger.reportException("Compilation error at file " + fileUrl, throwable) }
-
+            KotlinCodegenFacade.compileCorrectFiles(generationState)
             val factory = generationState.factory
             val files = HashMap<String, ByteArray>()
             for (file in factory.asList()) {

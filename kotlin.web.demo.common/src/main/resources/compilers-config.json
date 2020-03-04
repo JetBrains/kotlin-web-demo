@@ -23,18 +23,18 @@
     "pluginBuild": "1.2.71-release-IJ2018.3-1"
   },
   {
-    "version": "1.3.60",
-    "stdlibVersion": "1.3.60",
-    "buildType": "Kotlin_KotlinRelease_1360_Aggregate",
-    "build": "1.3.60-release-255",
-    "pluginBuild": "1.3.60-release-IJ2018.3-1"
-  },
-  {
     "version": "1.3.61",
     "stdlibVersion": "1.3.61",
     "buildType": "Kotlin_KotlinRelease_1360_Aggregate",
     "build": "1.3.61-release-180",
-    "pluginBuild": "1.3.61-release-IJ2018.3-1",
+    "pluginBuild": "1.3.61-release-IJ2018.3-1"
+  },
+  {
+    "version": "1.3.70",
+    "stdlibVersion": "1.3.70",
+    "buildType": "Kotlin_KotlinRelease_1370_Aggregate",
+    "build": "1.3.70-release-328",
+    "pluginBuild": "1.3.70-release-IJ2018.3-1",
     "latestStable": true
   }
 ]
