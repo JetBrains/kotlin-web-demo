@@ -35,7 +35,7 @@ apply plugin: "org.jetbrains.kotlin.jvm"
 
 repositories {
     teamcityServer {
-        url = 'https://teamcity.jetbrains.com/'
+        url = 'https://buildserver.labs.intellij.net/'
     }
     maven {
         url "https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-plugin"
