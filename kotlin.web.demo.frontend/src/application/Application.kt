@@ -49,20 +49,14 @@ object Application {
                         event.keyCode == KeyCode.F9.code && event.ctrlKey
                     }),
                     "org.jetbrains.web.demo.reformat" to Shortcut(arrayOf("Ctrl", "Alt", "L"), { false }),
-                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { false }),
-                    "org.jetbrains.web.demo.save" to Shortcut(arrayOf("Ctrl", "S"), { event ->
-                        event.keyCode == KeyCode.S.code && event.ctrlKey
-                    })
+                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { false })
             ),
             hashMapOf(
                     "org.jetbrains.web.demo.run" to Shortcut(arrayOf("Ctrl", "R"), { event ->
                         event.keyCode == KeyCode.R.code && event.ctrlKey
                     }),
                     "org.jetbrains.web.demo.reformat" to Shortcut(arrayOf("Cmd", "Alt", "L"), { false }),
-                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { false }),
-                    "org.jetbrains.web.demo.save" to Shortcut(arrayOf("Cmd", "S"), { event ->
-                        event.keyCode == KeyCode.S.code && event.metaKey
-                    })
+                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { false })
             )
     )
     val versionView = KotlinVersionView(
@@ -97,12 +91,6 @@ object Application {
                         setState(userProjectPrefix + project.id, project.name)
                     }
                     navBarView.onProjectSelected(project)
-                }
-                if (project is UserProject ||
-                        (project is Task && loginView.isLoggedIn)) {
-                    saveButton.enable()
-                } else {
-                    saveButton.disable()
                 }
                 consoleView.clear()
                 junitView.clear()
@@ -243,20 +231,6 @@ object Application {
                         accordion.selectedFileView!!.file
                 )
             }
-    )
-
-    val saveButton: Button = Button(
-            Elements.saveButton,
-            onClick = {
-                val selectedProject = accordion.selectedProjectView!!.project
-                if (selectedProject is UserProject) {
-                    accordion.selectedProjectView!!.project.save()
-                    accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
-                } else if (selectedProject.type == ProjectType.TASK && loginView.isLoggedIn) {
-                    projectProvider.saveSolution(selectedProject)
-                }
-            },
-            disabled = true
     )
 
     private val converterProvider = ConverterProvider()
@@ -492,15 +466,6 @@ object Application {
             var shortcut = actionManager.getShortcut("org.jetbrains.web.demo.run")
             if (shortcut.isPressed(e as KeyboardEvent)) {
                 Elements.runButton.click()
-            } else {
-                shortcut = actionManager.getShortcut("org.jetbrains.web.demo.save")
-                if (shortcut.isPressed(e)) {
-                    if (saveButton.disabled) {
-                        Elements.saveAsButton.click()
-                    } else {
-                        Elements.saveButton.click()
-                    }
-                }
             }
         }
 
@@ -509,39 +474,10 @@ object Application {
             accordion.selectedProjectView!!.selectFileFromUrl()
         }
 
-        IncompleteActionManager.registerAction(
-                "save",
-                "onHeadersLoaded",
-                {
-                    localStorage.setItem("contentToSave", JSON.stringify(accordion.selectedProjectView!!.project))
-                },
-                {
-                    var content = JSON.parse<dynamic>(localStorage.getItem("contentToSave")!!)
-                    localStorage.removeItem("contentToSave")
-                    if (content != null && loginView.isLoggedIn) {
-                        InputDialogView(
-                                "Save project",
-                                "Project name:",
-                                "Save",
-                                content.name,
-                                { name ->
-                                    accordion.validateNewProjectName(name)
-                                },
-                                { userInput ->
-                                    projectProvider.forkProject(content, { data ->
-                                        accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content))
-                                    }, userInput.value)
-                                }
-                        )
-                    }
-                }
-        )
-
         //TODO
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.autocomplete").shortcutKeyNames, "Code completion")
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.run").shortcutKeyNames, "Run program")
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.reformat").shortcutKeyNames, "Reformat selected fragment")
-        ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.save").shortcutKeyNames, "Save current project")
         editor.highlightOnTheFly = Elements.onTheFlyCheckbox.checked
 
         jq(document).on("click", ".ui-widget-overlay", {
@@ -553,7 +489,6 @@ object Application {
         val converterButton = document.getElementById("java2kotlin-button") as HTMLElement
         converterButton.onclick = { converterView.open() }
         Elements.runButton.title = Elements.runButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.run").name)
-        Elements.saveButton.title = Elements.saveButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.save").name)
     }
 }
 

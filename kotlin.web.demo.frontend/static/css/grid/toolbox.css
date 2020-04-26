@@ -77,22 +77,6 @@
     color: #585858;
 }
 
-#saveButton .icon {
-    height: 12px;
-    width: 12px;
-    margin: 2px auto;
-    background: url("/static/images/icons_all_sprite.svg") -100px -50px;
-}
-
-#saveAsButton .icon {
-    height: 15px;
-    width: 16px;
-    position: relative;
-    top: 1px;
-    margin: 0 auto;
-    background: url("/static/images/icons_all_sprite.svg") -100px -150px;
-}
-
 .argumentsButtonWrapper {
     display: inline-block;
     position: relative;

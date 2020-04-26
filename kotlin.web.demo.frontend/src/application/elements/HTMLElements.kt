@@ -33,10 +33,8 @@ internal object Elements{
     val argumentsInputElement = document.getElementById("arguments") as HTMLInputElement
     val shortcutsButton = document.getElementById("shortcuts-button") as HTMLElement
     val onTheFlyCheckbox = document.getElementById("on-the-fly-checkbox") as HTMLInputElement
-    val saveAsButton = document.getElementById("saveAsButton") as HTMLElement
     val runMode = document.getElementById("runMode") as HTMLElement
     val runButton = document.getElementById("runButton") as HTMLElement
-    val saveButton = document.getElementById("saveButton") as HTMLElement
 
     fun init() {
         argumentsInputElement.oninput = {
@@ -57,31 +55,5 @@ internal object Elements{
         jq(runMode).selectmenu(json(
             "icons" to json( "button" to "selectmenu-arrow-icon" )
         ))
-
-
-        saveAsButton.onclick = {
-            if (Application.loginView.isLoggedIn) {
-                InputDialogView(
-                        "Save project",
-                        "Project name:",
-                        "Save",
-                        Application.accordion.selectedProjectView!!.project.name,
-                        { name ->
-                            Application.accordion.validateNewProjectName(name)
-                        },
-                        { userInput ->
-                            Application.projectProvider.forkProject(Application.accordion.selectedProjectView!!.project, { data ->
-                                Application.accordion.selectedProjectView!!.project.loadOriginal()
-                                Application.accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content))
-                            }, userInput.value)
-                        }
-                )
-            } else {
-                IncompleteActionManager.incomplete("save")
-                Application.loginView.openLoginDialog({
-                    IncompleteActionManager.cancel("save")
-                })
-            }
-        }
     }
 }
