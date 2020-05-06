@@ -81,7 +81,7 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
     }
     /**
-     * ADD DEPENDENCIES TO KOTLIN 1.4.M1 COMPILER
+     * ADD DEPENDENCIES TO KOTLIN 1.4.M2 COMPILER
      *
      * If you want to add some another dependencies to kotlin-compiler you can use 'library' task.
      *
