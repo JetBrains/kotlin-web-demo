@@ -18,6 +18,10 @@ package org.jetbrains.webdemo.authorization;
 
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.OAuthConfig;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Token;
+import org.scribe.oauth.OAuth20ServiceImpl;
+import org.scribe.oauth.OAuthService;
 import org.scribe.utils.OAuthEncoder;
 
 /**
@@ -31,6 +35,16 @@ public class GithubApi extends DefaultApi20 {
     @Override
     public String getAccessTokenEndpoint() {
         return "https://github.com/login/oauth/access_token";
+    }
+
+    @Override
+    public OAuthService createService(OAuthConfig config) {
+        return new OAuth20ServiceImpl(this, config) {
+            @Override
+            public void signRequest(Token accessToken, OAuthRequest request) {
+                request.addHeader("Authorization", "token " + accessToken.getToken());
+            }
+        };
     }
 
     @Override
