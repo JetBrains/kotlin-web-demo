@@ -18,6 +18,17 @@
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head lang="en">
     <title>Try Kotlin</title>
+    <script>
+      var redirectToUrl = 'https://play.kotlinlang.org/';
+
+      if (location.hash.indexOf('#/Examples/') !== -1) {
+        redirectToUrl += 'byExample/';
+      } else if (location.hash.indexOf('#/Kotlin%20Koans/') !== -1) {
+        redirectToUrl += 'koans/';
+      }
+
+      location.replace(redirectToUrl);
+    </script>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
