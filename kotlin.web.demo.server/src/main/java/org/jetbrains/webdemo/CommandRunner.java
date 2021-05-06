@@ -32,6 +32,12 @@ public class CommandRunner {
             ApplicationSettings.BACKEND_URL = value;
         }else if (setting.equals("is_test_version")) {
             CommonSettings.IS_TEST_VERSION = Boolean.parseBoolean(value);
+        } else if (setting.equals("azure_key")) {
+            ApplicationSettings.AZURE_OAUTH_CREDENTIALS.KEY = value;
+        } else if (setting.equals("azure_secret")) {
+            ApplicationSettings.AZURE_OAUTH_CREDENTIALS.SECRET = value;
+        } else if (setting.equals("azure_tenant")) {
+            ApplicationSettings.AZURE_OAUTH_CREDENTIALS.TENANT = value;
         } else if (setting.equals("google_key")) {
             ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY = value;
         } else if (setting.equals("google_secret")) {

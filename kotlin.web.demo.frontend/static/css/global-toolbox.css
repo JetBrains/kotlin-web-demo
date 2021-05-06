@@ -52,6 +52,10 @@
     background: url("/static/images/fb_icon.svg") no-repeat;
 }
 
+.icon.azure {
+    background: url("/static/images/azure_icon.svg") no-repeat;
+}
+
 .icon.google {
     background: url("/static/images/icons_all_sprite.svg") no-repeat -200px -46px;
 }

@@ -35,6 +35,8 @@ public abstract class AuthorizationHelper {
 
     public static AuthorizationHelper getHelper(String type, String host) {
         switch (type) {
+            case "azure":
+                return new AuthorizationAzureHelper(host);
             case "twitter":
                 return new AuthorizationTwitterHelper(host);
             case "google":
